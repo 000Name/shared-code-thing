@@ -6,9 +6,12 @@ class Musiclibrary:
         self.musicdata = self.load_data() #originally within the loaddata function,changed to here so code doesnt have to call load data everytime 
 
     def load_data(self):
-        with open(self.filepath, "r") as d:
+        with open(self.file, "r") as d:  # fixed from self.filepath to self.file
             values = d.readlines()
-            return [value.strip().split(",") for value in values] 
+            data = [value.strip().split(",") for value in values] 
+            for row in data:
+                row[self.posindex["Length"]] = row[self.posindex["Length"]]  # keep as str in memory
+            return data
             #format of the txt would be song,artist,genre,length ,.split by , gives 4 seperate values from one line
 
     def sort(self, posname, reverse = False):
@@ -40,6 +43,20 @@ class Musiclibrary:
                 total += length #same as total = total + length
         return playlist
 
+    def playlist_by_genre(self, genre):
+        return [song for song in self.musicdata if song[self.posindex["Genre"]].lower() == genre.lower()] #adds all songs of a genre to a list
+
+    def save_artist_songs(self, artistname, outputfile):
+        songs = [song for song in self.musicdata if song[self.posindex["ArtistName"]].lower() == artistname.lower()] #same principle as genre,
+        with open(outputfile, "w") as f:
+            for song in songs:
+                # force output order: SongName, ArtistName, Genre, Length
+                line = [song[self.posindex["SongName"]], song[self.posindex["ArtistName"]], song[self.posindex["Genre"]], song[self.posindex["Length"]]]
+                #data is in the same format as the musicdata.txt 
+                f.write(",".join(line) + "\n")
+                #.join is used to take the seperated items and stored as str in the textfile
+        return songs
+
     def genresort(self):
         genre_stored = {}
         for song in self.musicdata:
@@ -51,6 +68,6 @@ class Musiclibrary:
 
         for genre, lengths in genre_stored.items():  #.item() to give a pair of values of genre and length [('genre',''),('length','')]
             average_len = sum(lengths) / len(lengths)
-            mins, secs = average_len // 60, int(average_len % 60 
+            mins, secs = average_len // 60, int(average_len % 60)
             print()#placeholder
 file = "musicdata.txt"
