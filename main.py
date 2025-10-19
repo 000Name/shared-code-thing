@@ -32,6 +32,7 @@ class UserAccount:
             with open(self.filename, "r") as f:
                 for line in f:
                     parts = line.strip().split(",")
+                    #parts refer to the individual components of the array
                     if parts[0] == username and parts[1] == password:
                         print("Login successful")
                         self.userlogin = [parts[0], parts[1]]
