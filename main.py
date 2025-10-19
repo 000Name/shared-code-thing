@@ -3,7 +3,7 @@ import os
 class UserAccount:
     posindex = {"BirthDate": 0, "FavouriteArtist": 1, "FavouriteGenre": 2}  #index for data of users ,password and username are seperated
 
-    def __init__(self, filename="user_account.txt"):
+    def __init__(self, filename="user.txt"):
         self.filename = filename
         self.userdata = ["", "", ""]  # only birthdate, fav artist, fav genre now
         self.userlogin = ["", ""]  # username, password
@@ -24,27 +24,28 @@ class UserAccount:
         # join concentrates the differet inputs , allowing it all to be stored in one single line
 
     def login(self):
-        print("Login")
-        username = input("Username: ").strip() #.strip removes any unnecessary spaces
-        password = input("Password: ").strip()
+    print("Login")
+    username = input("Username: ").strip()
+    password = input("Password: ").strip()
 
-        try:
-            with open(self.filename, "r") as f:
-                for line in f:
-                    parts = line.strip().split(",")
-                    if len(parts) < 5:
-                        continue
-                    if parts[0] == username and parts[1] == password:
-                        print("Login successful")
-                        self.userlogin = parts[0:2]
-                        self.userdata = parts[2:5]
-                        return True
-        except FileNotFoundError:
-            print("No accounts found")
-            return False
+    try:
+        with open(self.filename, "r") as f:
+            for line in f:
+                parts = line.strip().split(",")
+                file_username, file_password, birthdate, fav_artist, fav_genre = parts
 
-        print("Invalid detail")
+                if file_username == username and file_password == password:
+                    print("Login successful")
+                    self.userlogin = [file_username, file_password]
+                    self.userdata = [birthdate, fav_artist, fav_genre]
+                    return True
+    except FileNotFoundError:
+        print("No accounts found")
         return False
+
+    print("Invalid detail")
+    return False
+
 
     def load_from_file(self):
         try:
