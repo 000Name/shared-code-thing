@@ -34,8 +34,8 @@ class UserAccount:
                     parts = line.strip().split(",")
                     if parts[0] == username and parts[1] == password:
                         print("Login successful")
-                        self.userlogin = parts[0:2]
-                        self.userdata = parts[2:5]
+                        self.userlogin = [parts[0], parts[1]]
+                        self.userdata = [parts[2], parts[3], parts[4]]
                         return True
         except FileNotFoundError:
             print("No accounts found")
@@ -43,20 +43,6 @@ class UserAccount:
 
         print("Invalid detail")
         return False
-
-    def load_from_file(self):
-        try:
-            with open(self.filename, "r") as f:
-                lines = f.readlines()
-                if not lines:
-                    return
-                line = lines[-1].strip()
-                parts = line.split(",")
-                self.userlogin = parts[0:2]
-                self.userdata = parts[2:5]
-        except FileNotFoundError:
-            with open(self.filename, "w") as f:
-                pass  # create empty file if not exist
 
     def edit_favourites(self):
         print("Edit data")
@@ -87,7 +73,7 @@ class UserAccount:
         updated_lines = []
         for line in lines:
             parts = line.strip().split(",")
-            if parts[0] == self.userlogin[0]:
+            if len(parts) >= 5 and parts[0] == self.userlogin[0]:
                 line = ",".join(self.userlogin + self.userdata) + "\n"
             updated_lines.append(line)
 
@@ -152,7 +138,7 @@ class Musiclibrary:
         for song in sorted_songs:
             SongName, ArtistName, Genre, Length = song
             mins, secs = self.displayedtime(song)
-            print(f"Song: {SongName} \n Artist: {ArtistName} \n Genre: {Genre} \n Length: {mins}:{secs}")
+            print(f"Song: {SongName} \n Artist: {ArtistName} \n Genre: {Genre} \n Length: {mins:02d}:{secs:02d}")
 
     def displayedtime(self, song):
         length = int(song[self.posindex["Length"]])
@@ -198,7 +184,8 @@ class Musiclibrary:
                 print(f"Viewing Playlist: {playlist_name}")
                 for line in lines:
                     parts = line.strip().split(",")
-                    print(f"Song: {parts[0]} \n Artist: {parts[1]} \n Length: {int(parts[2])//60}:{int(parts[2])%60}")
+                    if len(parts) == 3:
+                        print(f"Song: {parts[0]} \n Artist: {parts[1]} \n Length: {int(parts[2])//60:02d}:{int(parts[2])%60:02d}")
         except FileNotFoundError:
             print("Playlist not found.")
 
@@ -257,13 +244,13 @@ class Musiclibrary:
                 for genre, lengths in genre_stored.items():
                     average_len = sum(lengths) / len(lengths)
                     mins, secs = average_len // 60, int(average_len % 60)
-                    print(f"Genre: {genre} \n Average Length: {int(mins)}:{int(secs)}")
+                    print(f"Genre: {genre} \n Average Length: {int(mins):02d}:{int(secs):02d}")
             case "2":
                 search_genre = input("Enter genre to view: ").strip()
                 if search_genre in genre_stored:
                     average_len = sum(genre_stored[search_genre]) / len(genre_stored[search_genre])
                     mins, secs = average_len // 60, int(average_len % 60)
-                    print(f"Genre: {search_genre} \n Average Length: {int(mins)}:{int(secs)}")
+                    print(f"Genre: {search_genre} \n Average Length: {int(mins):02d}:{int(secs):02d}")
                 else:
                     print("Genre not found")
             case "3":
@@ -276,7 +263,6 @@ class Musiclibrary:
 file = "musicdata.txt"
 def main():
     user = UserAccount()
-    user.load_from_file()
     library = Musiclibrary("musicdata.txt")
 
     print("1. Login \n 2. Create account")
