@@ -61,10 +61,10 @@ class UserAccount:
                 return self.edit_favourites()
 
         # Rewrite the updated data to the file
-        self.update_user_in_file()
+        self.updateuser()
         print("updated")
 
-    def update_user_in_file(self):
+    def updateuser(self):
         try:
             with open(self.filename, "r") as f:
                 lines = f.readlines()
