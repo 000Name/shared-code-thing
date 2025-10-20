@@ -45,7 +45,7 @@ class UserAccount:
         print("Invalid detail")
         return False
 
-    def edit_favourites(self):
+    def editfav(self):
         print("Edit data")
         print("1.Change favourite artist \n 2. Change favourite genre \n 3. Exit")
         choice = input("Enter your choice: ").strip()
@@ -58,7 +58,7 @@ class UserAccount:
                 return
             case _:
                 print("Invalid")
-                return self.edit_favourites()
+                return self.editfav()
 
         # Rewrite the updated data to the file
         self.updateuser()
@@ -81,7 +81,7 @@ class UserAccount:
         with open(self.filename, "w") as f:
             f.writelines(updated_lines)
 
-    def display_user_info(self):
+    def displayinfo(self):
         print(" User info ")
         print("Username:", self.userlogin[0])
         for key, index in self.posindex.items():
@@ -145,7 +145,7 @@ class Musiclibrary:
         length = int(song[self.posindex["Length"]])
         return length // 60, length % 60 #floor div for min,modulus for second
 
-    def manage_playlists(self):
+    def manageplaylist(self):
         print(" Menu \n 1. Create playlist \n 2. View playlist \n 3. Exit")
         choice = input("Enter choice: ").strip()
 
@@ -164,7 +164,7 @@ class Musiclibrary:
                 return
             case _:
                 print("Invalid choice")
-                return self.manage_playlists()
+                return self.manageplaylist()
 
     def create_playlist(self, playlist_name, songs):
         if len(songs) == 0:
@@ -190,8 +190,8 @@ class Musiclibrary:
         except FileNotFoundError:
             print("Playlist not found.")
 
-    def auto_generate_playlist(self):
-        print(" List generator \n 1. Generate by time  \n 2. Generate by genre \n 3. Exit")
+    def autogen(self):
+        print(" List generate \n 1. Generate by time  \n 2. Generate by genre \n 3. Exit")
         choice = input("Enter your choice: ").strip()
 
         match choice:
@@ -210,7 +210,7 @@ class Musiclibrary:
                 return
             case _:
                 print("Invalid choice")
-                return self.auto_generate_playlist()
+                return self.autogen()
 
     def playlisttime(self, timelimitminutes: int):
         timelimit = timelimitminutes * 60 
@@ -279,7 +279,7 @@ def main():
             print("Invalid choice")
             return
 
-    user.display_user_info()
+    user.displayinfo()
 
     while True:
         print("Main menu \n 1. Edit favourite \n 2. View song \n 3. Manage lists \n 4. List generator \n 5. Summary \n 6. Exit")
@@ -287,13 +287,13 @@ def main():
 
         match option:
             case "1":
-                user.edit_favourites()
+                user.editfav()
             case "2":
                 library.songoutput(library.musicdata)
             case "3":
-                library.manage_playlists()
+                library.manageplaylist()
             case "4":
-                library.auto_generate_playlist()
+                library.autogen()
             case "5":
                 library.genresort()
             case "6":
