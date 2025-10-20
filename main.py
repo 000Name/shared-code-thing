@@ -1,7 +1,7 @@
 import os 
 
 class UserAccount:
-    posindex = {"BirthDate": 0, "FavouriteArtist": 1, "FavouriteGenre": 2}  #index for data of users ,password and username are seperated
+    posindex = {"BirthDate": 0, "FavouriteArtist": 1, "FavouriteGenre": 2}  
 
     def __init__(self, filename="user_account.txt"):
         self.filename = filename
