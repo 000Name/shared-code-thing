@@ -1,8 +1,8 @@
 import os 
 
 class UserAccount:
-    loginindex = {"Username": 0, "Password": 1}  # index for username and password
-    posindex = {"BirthDate": 0, "FavouriteArtist": 1, "FavouriteGenre": 2}  # index for user data
+    loginindex = {"Username": 0, "Password": 1}  # index for user info
+    posindex = {"BirthDate": 0, "FavouriteArtist": 1, "FavouriteGenre": 2}  # index for user preference
 
     def __init__(self, filename="user_account.txt"):
         self.filename = filename
