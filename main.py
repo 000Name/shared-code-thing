@@ -5,7 +5,7 @@ class UserAccount:
 
     def __init__(self, filename="user_account.txt"):
         self.filename = filename
-        self.userdata = ["", "", ""]  # only birthdate, fav artist, fav genre now
+        self.userdata = ["", "", ""]  # only birthdate, fav artist, fav genre 
         self.userlogin = ["", ""]  # username, password
 
     def createaccount(self):
