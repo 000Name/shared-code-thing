@@ -206,7 +206,6 @@ class Musiclibrary:
                 if playlist:
                     self.create_playlist(f"autoplaylist_{genre}", playlist)
             case "3":
-                print("Exiting auto playlist generator.")
                 return
             case _:
                 print("Invalid choice")
@@ -265,10 +264,8 @@ file = "musicdata.txt"
 def main():
     user = UserAccount()
     library = Musiclibrary("musicdata.txt")
-
     print("1. Login \n 2. Create account")
     choice = input("Enter choice: ").strip()
-
     match choice:
         case "1":
             if not user.login():
@@ -278,13 +275,10 @@ def main():
         case _:
             print("Invalid choice")
             return
-
     user.displayinfo()
-
     while True:
         print("Main menu \n 1. Edit favourite \n 2. View song \n 3. Manage lists \n 4. List generator \n 5. Summary \n 6. Exit")
         option = input("Enter your choice: ").strip()
-
         match option:
             case "1":
                 user.editfav()
@@ -300,5 +294,4 @@ def main():
                 break
             case _:
                 print("invalid choice")
-
 main()
