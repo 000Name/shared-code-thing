@@ -60,8 +60,6 @@ class UserAccount:
             case _:
                 print("Invalid")
                 return self.editfav()
-
-        # Rewrite the updated data to the file
         self.updateuser()
         print("updated")
 
@@ -90,18 +88,18 @@ class UserAccount:
 
 
 class Musiclibrary:
-    posindex = {"SongName": 0, "ArtistName": 1, "Genre": 2, "Length": 3}  #constant stored, length is stored in seconds
-
-    def __init__(self, file): #allows easier object creation, file is usable within the 
+    posindex = {"SongName": 0, "ArtistName": 1, "Genre": 2, "Length": 3} 
+    
+    def __init__(self, file): 
         self.file = file
-        self.musicdata = self.load_data() #originally within the loaddata function,changed to here so code doesnt have to call load data everytime 
-
+        self.musicdata = self.load_data()
+        
     def load_data(self):
-        with open(self.file, "r") as d:  # fixed from self.filepath to self.file
+        with open(self.file, "r") as d:  
             values = d.readlines()
             data = [value.strip().split(",") for value in values] 
             for row in data:
-                row[self.posindex["Length"]] = row[self.posindex["Length"]]  # keep as str in memory
+                row[self.posindex["Length"]] = int(row[self.posindex["Length"]])
             return data
             #format of the txt would be song,artist,genre,length ,.split by , gives 4 seperate values from one line
 
@@ -113,14 +111,13 @@ class Musiclibrary:
                 return sorted(self.musicdata,key=lambda x: x[self.posindex[posname]],reverse=reverse)
 #sorted according to the posindex provided,since length has to be an int,has to sort differently,
 #reverse = reverse allows both asc and desc in one func instead of 2
-#uses match case (just alternative way of doing if else statements)
     def search(self, posname, usersearchreq):
         return [x for x in self.musicdata if x[self.posindex[posname]] == usersearchreq]
 #prints out data only if matching posindex with inputted index 
 #x refers to each item, and only return value that corresponds with the user search
 
     def songoutput(self, songs):
-        print("View \n1. By song title \n 2. By artist \n 3. By genre")
+        print("View \n 1. By song title \n 2. By artist \n 3. By genre")
         choice = input("Enter your choice: ").strip()
 
         match choice:
@@ -173,9 +170,9 @@ class Musiclibrary:
             for song in songs:
                 SongName = song[self.posindex["SongName"]]
                 ArtistName = song[self.posindex["ArtistName"]]
-                Genre = song[self.posindex["Genre"]]  # added genre
+                Genre = song[self.posindex["Genre"]]  
                 Length = song[self.posindex["Length"]]
-                f.write(f"{SongName},{ArtistName},{Genre},{Length}\n")  # added genre in line
+                f.write(f"{SongName},{ArtistName},{Genre},{Length}\n") 
         print(f"Playlist '{playlist_name}' saved")
 
     def view_playlist(self, playlist_name):
@@ -185,7 +182,7 @@ class Musiclibrary:
                 print(f"Viewing Playlist: {playlist_name}")
                 for line in lines:
                     parts = line.strip().split(",")
-                    if len(parts) == 4:  # updated to 4 to include genre
+                    if len(parts) == 4: 
                         print(f"Song: {parts[0]} \n Artist: {parts[1]} \n Genre: {parts[2]} \n Length: {int(parts[3])//60}:{int(parts[3])%60}")
         except FileNotFoundError:
             print("Playlist not found.")
@@ -234,10 +231,8 @@ class Musiclibrary:
             if genre not in genre_stored:
                 genre_stored[genre] = []
             genre_stored[genre].append(length)
-
         print("Menu \n 1. View all genres \n 2. View one genre \n 3. Exit")
         choice = input("Enter your choice: ").strip()
-
         match choice:
             case "1":
                 print("\n All genre")
