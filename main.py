@@ -164,28 +164,30 @@ class Musiclibrary:
                 return self.manageplaylist()
 
     def create_playlist(self, playlist_name, songs):
-        if len(songs) == 0:
-            print("Playlist must contain one song miniumim")
-            return
-        with open(f"{playlist_name}.txt", "w") as f:
-            for song in songs:
-                SongName = song[self.posindex["SongName"]]
-                ArtistName = song[self.posindex["ArtistName"]]
-                Length = song[self.posindex["Length"]]
-                f.write(f"{SongName},{ArtistName},{Length}\n")
-        print(f"Playlist '{playlist_name}' saved")
+    if len(songs) == 0:
+        print("Playlist must contain one song miniumim")
+        return
+    with open(f"{playlist_name}.txt", "w") as f:
+        for song in songs:
+            SongName = song[self.posindex["SongName"]]
+            ArtistName = song[self.posindex["ArtistName"]]
+            Genre = song[self.posindex["Genre"]] 
+            Length = song[self.posindex["Length"]]
+            f.write(f"{SongName},{ArtistName},{Genre},{Length}\n")
+    print(f"Playlist '{playlist_name}' saved")
 
     def view_playlist(self, playlist_name):
-        try:
-            with open(f"{playlist_name}.txt", "r") as f:
-                lines = f.readlines()
-                print(f"Viewing Playlist: {playlist_name}")
-                for line in lines:
-                    parts = line.strip().split(",")
-                    if len(parts) == 3:
-                        print(f"Song: {parts[0]} \n Artist: {parts[1]} \n Length: {int(parts[2])//60:02d}:{int(parts[2])%60:02d}")
-        except FileNotFoundError:
+    try:
+        with open(f"{playlist_name}.txt", "r") as f:
+            lines = f.readlines()
+            print(f"Viewing Playlist: {playlist_name}")
+            for line in lines:
+                parts = line.strip().split(",")
+                if len(parts) == 4:  
+                    print(f"Song: {parts[0]} \n Artist: {parts[1]} \n Genre: {parts[2]} \n Length: {int(parts[3])//60}:{int(parts[3])%60}")
+    except FileNotFoundError:
             print("Playlist not found.")
+
 
     def autogen(self):
         print(" List generate \n 1. Generate by time  \n 2. Generate by genre \n 3. Exit")
