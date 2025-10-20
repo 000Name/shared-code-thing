@@ -1,17 +1,18 @@
 import os 
 
 class UserAccount:
-    posindex = {"BirthDate": 0, "FavouriteArtist": 1, "FavouriteGenre": 2}  
+    loginindex = {"Username": 0, "Password": 1}  # index for username and password
+    posindex = {"BirthDate": 0, "FavouriteArtist": 1, "FavouriteGenre": 2}  # index for user data
 
     def __init__(self, filename="user_account.txt"):
         self.filename = filename
-        self.userdata = ["", "", ""]  # only birthdate, fav artist, fav genre 
+        self.userdata = ["", "", ""]  # only birthdate, fav artist, fav genre now
         self.userlogin = ["", ""]  # username, password
 
     def createaccount(self):
         print("Account creation")
-        self.userlogin[0] = input("Enter username: ").strip()
-        self.userlogin[1] = input("Enter password: ").strip()
+        self.userlogin[self.loginindex["Username"]] = input("Enter username: ").strip()
+        self.userlogin[self.loginindex["Password"]] = input("Enter password: ").strip()
         self.userdata[self.posindex["BirthDate"]] = input("Enter your birth date: ").strip()
         self.userdata[self.posindex["FavouriteArtist"]] = input("Enter your favourite artist: ").strip()
         self.userdata[self.posindex["FavouriteGenre"]] = input("Enter your favourite genre: ").strip()
@@ -33,9 +34,9 @@ class UserAccount:
                 for line in f:
                     parts = line.strip().split(",")
                     #parts refer to the individual components of the array
-                    if parts[0] == username and parts[1] == password:
+                    if parts[self.loginindex["Username"]] == username and parts[self.loginindex["Password"]] == password:
                         print("Login successful")
-                        self.userlogin = [parts[0], parts[1]]
+                        self.userlogin = [parts[self.loginindex["Username"]], parts[self.loginindex["Password"]]]
                         self.userdata = [parts[2], parts[3], parts[4]]
                         return True
         except FileNotFoundError:
@@ -74,7 +75,7 @@ class UserAccount:
         updated_lines = []
         for line in lines:
             parts = line.strip().split(",")
-            if len(parts) >= 5 and parts[0] == self.userlogin[0]:
+            if len(parts) >= 5 and parts[self.loginindex["Username"]] == self.userlogin[self.loginindex["Username"]]:
                 line = ",".join(self.userlogin + self.userdata) + "\n"
             updated_lines.append(line)
 
@@ -83,9 +84,10 @@ class UserAccount:
 
     def displayinfo(self):
         print(" User info ")
-        print("Username:", self.userlogin[0])
+        print("Username:", self.userlogin[self.loginindex["Username"]])
         for key, index in self.posindex.items():
             print(key + ":", self.userdata[index])
+
 
 class Musiclibrary:
     posindex = {"SongName": 0, "ArtistName": 1, "Genre": 2, "Length": 3}  #constant stored, length is stored in seconds
@@ -164,30 +166,29 @@ class Musiclibrary:
                 return self.manageplaylist()
 
     def create_playlist(self, playlist_name, songs):
-    if len(songs) == 0:
-        print("Playlist must contain one song miniumim")
-        return
-    with open(f"{playlist_name}.txt", "w") as f:
-        for song in songs:
-            SongName = song[self.posindex["SongName"]]
-            ArtistName = song[self.posindex["ArtistName"]]
-            Genre = song[self.posindex["Genre"]] 
-            Length = song[self.posindex["Length"]]
-            f.write(f"{SongName},{ArtistName},{Genre},{Length}\n")
-    print(f"Playlist '{playlist_name}' saved")
+        if len(songs) == 0:
+            print("Playlist must contain one song miniumim")
+            return
+        with open(f"{playlist_name}.txt", "w") as f:
+            for song in songs:
+                SongName = song[self.posindex["SongName"]]
+                ArtistName = song[self.posindex["ArtistName"]]
+                Genre = song[self.posindex["Genre"]]  # added genre
+                Length = song[self.posindex["Length"]]
+                f.write(f"{SongName},{ArtistName},{Genre},{Length}\n")  # added genre in line
+        print(f"Playlist '{playlist_name}' saved")
 
     def view_playlist(self, playlist_name):
-    try:
-        with open(f"{playlist_name}.txt", "r") as f:
-            lines = f.readlines()
-            print(f"Viewing Playlist: {playlist_name}")
-            for line in lines:
-                parts = line.strip().split(",")
-                if len(parts) == 4:  
-                    print(f"Song: {parts[0]} \n Artist: {parts[1]} \n Genre: {parts[2]} \n Length: {int(parts[3])//60}:{int(parts[3])%60}")
-    except FileNotFoundError:
+        try:
+            with open(f"{playlist_name}.txt", "r") as f:
+                lines = f.readlines()
+                print(f"Viewing Playlist: {playlist_name}")
+                for line in lines:
+                    parts = line.strip().split(",")
+                    if len(parts) == 4:  # updated to 4 to include genre
+                        print(f"Song: {parts[0]} \n Artist: {parts[1]} \n Genre: {parts[2]} \n Length: {int(parts[3])//60}:{int(parts[3])%60}")
+        except FileNotFoundError:
             print("Playlist not found.")
-
 
     def autogen(self):
         print(" List generate \n 1. Generate by time  \n 2. Generate by genre \n 3. Exit")
