@@ -87,9 +87,6 @@ class UserAccount:
         for key, index in self.posindex.items():
             print(key + ":", self.userdata[index])
 
-
-
-
 class Musiclibrary:
     posindex = {"SongName": 0, "ArtistName": 1, "Genre": 2, "Length": 3}  #constant stored, length is stored in seconds
 
